@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "LStricklin_Flexdashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
