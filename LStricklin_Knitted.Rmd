@@ -1,0 +1,48 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+complaints <- read_rds(complaints.rds)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+
+
+complaints2 <- complaints %>%
+  count(date_received)
+
+fig <- plot_ly(complaints2, x = ~date_received, y = ~n, type = 'scatter', mode = 'lines')
+fig %>% layout(title = 'title', yaxis=list(title = 'date_received'), xaxis = list(title='n'))
+fig
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+

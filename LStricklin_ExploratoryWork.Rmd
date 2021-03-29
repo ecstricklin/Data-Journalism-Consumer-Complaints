@@ -1,0 +1,78 @@
+---
+title: "LStricklin_Work"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(plotly)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+QUESTIONS I HAVE:
+1. Have the complaints increased over time?
+2. Which states had the most complaints?
+i rly would like to compare this to previous years but i guess that isn't an option
+3. What companies had the most issues? Are there any companies that have overwhelmingly more complaints?
+
+Let's test these out:
+
+1. Have the complaints increased over time?
+
+```{r}
+complaints2 <- complaints %>%
+  count(date_received)
+
+fig <- plot_ly(complaints2, x = ~date_received, y = ~n, type = 'scatter', mode = 'lines')
+fig %>% layout(title = 'title', yaxis=list(title = 'date_received'), xaxis = list(title='n'))
+fig
+```
+conclusion! complaints have nearly doubled since march!
+
+2. Which states had the most complaints?
+
+```{r}
+complaints3 <- complaints %>%
+  count(state)
+
+fig2 <- plot_ly(complaints3, x = ~state, y = ~n, type = 'bar')
+fig2 %>% layout(title = 'title', yaxis=list(title = 'state'), xaxis = list(title='n'))
+fig2
+```
+
+conclusion! florida, california, and texas have a ton of complaints compared to everyone else!
+
+3. What companies had the most issues?
+
+```{r}
+
+complaints4 <- complaints %>%
+  count(company)
+
+fig3 <- plot_ly(complaints4, x = ~company, y = ~n, type = 'bar')
+fig3 %>% layout(title = 'title', yaxis=list(title = 'company'), xaxis = list(title='n'))
+fig3
+
+```
+
+conclusion! experian, transunion, and equifax take the cake!
