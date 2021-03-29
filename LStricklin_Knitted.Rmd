@@ -10,6 +10,9 @@ output:
 library(flexdashboard)
 library(tidyverse)
 library(plotly)
+library(tigris)
+library(tmap)
+library(tmaptools)
 complaints <- readRDS("~/github_stricklin/Data-Journalism-Consumer-Complaints/complaints.rds")
 ```
 
@@ -40,18 +43,37 @@ Column {data-width=350}
 
 complaints3 <- complaints %>%
   count(state)
-complaints3 <- complaints3 %>% filter(n > 8057)
+complaints3 <- complaints3 %>% filter(n > 8056)
 
 fig2 <- complaints3 %>% plot_ly(labels = ~state, values = ~n)
 fig2 <- fig2 %>% add_pie(hole = 0.6)
 fig2 <- fig2 %>% layout(title = 'title', showlegend = F, xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE), yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 fig2
 
+#making a map instead
+
+
+
+
+
 ```
 
 ### Chart C
 
 ```{r}
+
+states <- tigris::states(cb=T)
+complaints3 <- complaints %>%
+  count(state)
+complaints3_joined <- geo_join(states, complaints3, "STUSPS", "state")
+
+us_state_names <- unique(fips_codes$state_name)[1:51]
+
+complaints3_joined <- complaints3_joined %>% 
+  filter(NAME %in% us_state_names)
+
+tm_shape(complaints3_joined) +
+  tm_polygons("n")
 
 ```
 
