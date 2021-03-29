@@ -10,7 +10,7 @@ output:
 library(flexdashboard)
 library(tidyverse)
 library(plotly)
-complaints <- read_rds(complaints.rds)
+complaints <- readRDS("~/github_stricklin/Data-Journalism-Consumer-Complaints/complaints.rds")
 ```
 
 Column {data-width=650}
