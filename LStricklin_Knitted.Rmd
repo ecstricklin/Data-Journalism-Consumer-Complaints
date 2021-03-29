@@ -67,10 +67,10 @@ complaints3 <- complaints %>%
   count(state)
 complaints3_joined <- geo_join(states, complaints3, "STUSPS", "state")
 
-us_state_names <- unique(fips_codes$state_name)[1:51]
+#us_state_names <- unique(fips_codes$state_name)[1:51]
 
-complaints3_joined <- complaints3_joined %>% 
-  filter(NAME %in% us_state_names)
+#complaints3_joined <- complaints3_joined %>% 
+  #filter(NAME %in% us_state_names)
 
 mypalette <- colorNumeric("YlOrRd", domain = complaints3_joined$n)
 
