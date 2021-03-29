@@ -16,7 +16,7 @@ complaints <- readRDS("~/github_stricklin/Data-Journalism-Consumer-Complaints/co
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### Customer complaints have increased on an upward trend over the past year.
 
 ```{r}
 
@@ -26,7 +26,7 @@ complaints2 <- complaints %>%
   count(date_received)
 
 fig <- plot_ly(complaints2, x = ~date_received, y = ~n, type = 'scatter', mode = 'lines')
-fig %>% layout(title = 'title', yaxis=list(title = 'date_received'), xaxis = list(title='n'))
+fig %>% layout(title = 'Number of Customer Complaints per Day', yaxis=list(title = 'Date Received'), xaxis = list(title='Number of Complaints'))
 fig
 
 ```
