@@ -38,6 +38,15 @@ Column {data-width=350}
 
 ```{r}
 
+complaints3 <- complaints %>%
+  count(state)
+complaints3 <- complaints3 %>% filter(n > 8057)
+
+fig2 <- complaints3 %>% plot_ly(labels = ~state, values = ~n)
+fig2 <- fig2 %>% add_pie(hole = 0.6)
+fig2 <- fig2 %>% layout(title = 'title', showlegend = F, xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE), yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+fig2
+
 ```
 
 ### Chart C
