@@ -13,24 +13,35 @@ library(plotly)
 library(tigris)
 library(tmap)
 library(tmaptools)
+library(leaflet)
 complaints <- readRDS("~/github_stricklin/Data-Journalism-Consumer-Complaints/complaints.rds")
+
+states <- tigris::states(cb=T)
+complaints3 <- complaints %>%
+  count(state)
+complaints3_joined <- geo_join(states, complaints3, "STUSPS", "state")
+
+mypalette <- colorNumeric("YlOrRd", domain = complaints3_joined$n)
+
+popup_fcc <- paste0("Consumer Complaints Mar-Dec 2020: ", as.character(complaints3_joined$n))
+
+map <- leaflet(complaints3_joined) %>% 
+  addTiles() %>% 
+    setView(-98.483330, 38.712046, zoom = 4) %>% 
+      addPolygons(data = states, fillColor = ~mypalette(complaints3_joined$n), fillOpacity = 0.9, weight = 0.2, smoothFactor = 0.2, label = popup_fcc) %>% 
+        addLegend(pal=mypalette, values=complaints3_joined$n, bins=5, position="bottomright", title="Consumer Complaints Mar-Dec 2020", labFormat=labelFormat(digits=0))
 ```
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Customer complaints have increased on an upward trend over the past year.
+### Chart A
 
 ```{r}
 
+map
 
 
-complaints2 <- complaints %>%
-  count(date_received)
-
-fig <- plot_ly(complaints2, x = ~date_received, y = ~n, type = 'scatter', mode = 'lines')
-fig %>% layout(title = 'Number of Customer Complaints per Day', yaxis=list(title = 'Date Received'), xaxis = list(title='Number of Complaints'))
-fig
 
 ```
 
@@ -41,16 +52,12 @@ Column {data-width=350}
 
 ```{r}
 
-complaints3 <- complaints %>%
-  count(state)
-complaints3 <- complaints3 %>% filter(n > 8056)
+complaints2 <- complaints %>%
+  count(date_received)
 
-fig2 <- complaints3 %>% plot_ly(labels = ~state, values = ~n)
-fig2 <- fig2 %>% add_pie(hole = 0.6)
-fig2 <- fig2 %>% layout(title = 'title', showlegend = F, xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE), yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-fig2
-
-#making a map instead
+fig <- plot_ly(complaints2, x = ~date_received, y = ~n, type = 'scatter', mode = 'lines')
+fig %>% layout(title = 'Number of Customer Complaints per Day', yaxis=list(title = 'Date Received'), xaxis = list(title='Number of Complaints'))
+fig
 
 
 
@@ -62,25 +69,7 @@ fig2
 
 ```{r}
 
-states <- tigris::states(cb=T)
-complaints3 <- complaints %>%
-  count(state)
-complaints3_joined <- geo_join(states, complaints3, "STUSPS", "state")
 
-#us_state_names <- unique(fips_codes$state_name)[1:51]
-
-#complaints3_joined <- complaints3_joined %>% 
-  #filter(NAME %in% us_state_names)
-
-mypalette <- colorNumeric("YlOrRd", domain = complaints3_joined$n)
-
-popup_fcc <- paste0("Consumer Complaints Mar-Dec 2020: ", as.character(complaints3_joined$n))
-
-leaflet(complaints3_joined) %>% 
-  addTiles() %>% 
-    setView(-98.483330, 38.712046, zoom = 4) %>% 
-      addPolygons(data = states, fillColor = ~mypalette(complaints3_joined$n), fillOpacity = 0.9, weight = 0.2, smoothFactor = 0.2, label = popup_fcc) %>% 
-        addLegend(pal=mypalette, values=complaints3_joined$n, bins=5, position="bottomright", title="Consumer Complaints Mar-Dec 2020", labFormat=labelFormat(digits=0))
 
 ```
 
