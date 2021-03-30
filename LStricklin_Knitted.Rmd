@@ -14,6 +14,7 @@ library(tigris)
 library(tmap)
 library(tmaptools)
 library(leaflet)
+library(DT)
 complaints <- readRDS("~/github_stricklin/Data-Journalism-Consumer-Complaints/complaints.rds")
 
 states <- tigris::states(cb=T)
@@ -71,16 +72,20 @@ fig
 
 complaints4 <- complaints %>%
   count(company)
-complaints4.0 <- complaints4 %>% filter(n > 4000)
-complaints4.1 <- complaints4 %>% filter(n < 4000)
-complaints4.2 <- sum(complaints4.1$n)
-complaints4.3 <- c("Other",complaints4.2)
-complaints5 <- rbind(complaints4.0, complaints4.3)
 
-fig3 <- complaints5 %>% plot_ly(labels = ~company, values = ~n)
-fig3 <- fig3 %>% add_pie(hole = 0.6)
-fig3 <- fig3 %>% layout(title = "Companies Receiving Complaints in 2020", showlegend = F, xaxis = list(showgrid = FALSE, zerloine = FALSE, showticklabels = FALSE), yaxis = list(showgrid = FALSE, zerloine = FALSE, showticklabels = FALSE))
-fig3
+datatable(complaints4,
+          rownames = FALSE,)
+
+#complaints4.0 <- complaints4 %>% filter(n > 4000)
+#complaints4.1 <- complaints4 %>% filter(n < 4000)
+#complaints4.2 <- sum(complaints4.1$n)
+#complaints4.3 <- c("Other",complaints4.2)
+#complaints5 <- rbind(complaints4.0, complaints4.3)
+
+#fig3 <- complaints5 %>% plot_ly(labels = ~company, values = ~n)
+#fig3 <- fig3 %>% add_pie(hole = 0.6)
+#fig3 <- fig3 %>% layout(title = "Companies Receiving Complaints in 2020", showlegend = F, xaxis = list(showgrid = FALSE, zerloine = FALSE, showticklabels = FALSE), yaxis = list(showgrid = FALSE, zerloine = FALSE, showticklabels = FALSE))
+#fig3
 
 ```
 
